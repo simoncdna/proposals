@@ -1,5 +1,6 @@
 {
   "name": "proposals",
+  "description": "The proposals mod for Claude Code: pick how Claude presents its proposals (artifact or terminal)",
   "owner": { "name": "simoncdna" },
   "plugins": [{ "name": "proposals", "source": "./" }]
 }
