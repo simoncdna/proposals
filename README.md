@@ -2,6 +2,8 @@
 
 A [Claude Code mod](https://code.claude.com/docs/en/plugins/mods/overview) that lets you pick how Claude presents its proposals: options, designs, plans or comparisons it offers you to choose from. No more asking "show me that in an artifact" every time.
 
+![The proposals row above the Claude Code prompt: picking the artifact format, setting its instructions, then /proposals](docs/demo.gif)
+
 ## Formats
 
 | Format | What Claude does |
