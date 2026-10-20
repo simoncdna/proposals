@@ -16,12 +16,13 @@ const summary = ({ format, instructions }: Settings) =>
 // Whether the row holds the instructions field; the session's own, so every session starts with it closed
 const isEditing = atom({ plugin: 'proposals', key: 'isEditing' } as const, false)
 
-// The format under the band's focus ring, whose description the row shows while the ring is on it
+// The format under the band's focus ring, whose description the row shows until it is picked or the ring moves on
 const focused = atom({ plugin: 'proposals', key: 'focused' } as const, null as Format | null)
 
 async function pick($: EngineInterface, format: Format) {
   await $.store.set('format', format)
   await update($, isEditing, () => false)
+  await update($, focused, () => null)
 }
 
 async function saveInstructions($: EngineInterface, format: Format, text: string) {

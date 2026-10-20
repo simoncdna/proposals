@@ -151,7 +151,7 @@ test('hide takes the row away and show brings it back', async ($, on) => {
   await shown.unmount()
 })
 
-test('the row describes the format under the focus ring, and only that one', async ($, on) => {
+test('the row describes the format under the focus ring until it is picked', async ($, on) => {
   mock.store(on)
   on('ui.focus', () => ({}))
   on('ui.render', ($, e) => {
@@ -166,5 +166,11 @@ test('the row describes the format under the focus ring, and only that one', asy
 
   await $.ui.focus(focusOn('edit'))
   expect(await ui.find({ type: 'Text', text: /every proposal/ })).toBeUndefined()
+
+  await $.ui.focus(focusOn('format-terminal'))
+  expect(await ui.find({ type: 'Text', text: /everything in the terminal/ })).toBeDefined()
+  await ui.press({ key: 'format-terminal' })
+  expect(await ui.find({ type: 'Text', text: /everything in the terminal/ })).toBeUndefined()
+  await ui.press({ key: 'format-visual' })
   await ui.unmount()
 })

@@ -1,6 +1,6 @@
 {
   "name": "proposals",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Pick how Claude presents its proposals, from a row above the prompt or /proposals. visual: anything visual (mockups, layouts, palettes, logos) goes in an artifact, text choices stay as questions in the terminal. artifact: every proposal with options goes in an artifact. terminal: everything stays in the terminal, ASCII mockups included. default: the mod sends Claude no rule. Each format keeps your own instructions; left empty, Claude decides the layout and style.",
   "author": { "name": "simoncdna" },
   "types": "./types/index.d.ts"
