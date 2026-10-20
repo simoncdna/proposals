@@ -1,0 +1,5 @@
+{
+  "name": "proposals",
+  "owner": { "name": "simoncdna" },
+  "plugins": [{ "name": "proposals", "source": "./" }]
+}

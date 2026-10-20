@@ -1,0 +1,7 @@
+{
+  "name": "proposals",
+  "version": "0.1.0",
+  "description": "Pick how Claude presents its proposals (artifact, terminal questions) from a row above the prompt, with your own instructions",
+  "author": { "name": "simoncdna" },
+  "types": "./types/index.d.ts"
+}
