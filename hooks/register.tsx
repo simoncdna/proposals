@@ -1,7 +1,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import { DESCRIPTIONS, FORMATS, parseArgs, refusalFor, ruleFor, settingsOf, USAGE } from './proposals'
+import { DESCRIPTIONS, FORMATS, isFormat, parseArgs, refusalFor, ruleFor, settingsOf, USAGE } from './proposals'
 import type { Format, Settings } from './proposals'
 
 const MAUVE = '#cba6f7'
@@ -15,6 +15,9 @@ const summary = ({ format, instructions }: Settings) =>
 
 // Whether the row holds the instructions field; the session's own, so every session starts with it closed
 const isEditing = atom({ plugin: 'proposals', key: 'isEditing' } as const, false)
+
+// The format under the band's focus ring, whose description the row shows while the ring is on it
+const focused = atom({ plugin: 'proposals', key: 'focused' } as const, null as Format | null)
 
 async function pick($: EngineInterface, format: Format) {
   await $.store.set('format', format)
@@ -60,6 +63,20 @@ export const register: Register = on => {
     }
   })
 
+  on('ui.focus', async ($, e, next) => {
+    if (e.component === 'AbovePrompt') {
+      const format = e.plugin === 'proposals' ? e.element?.replace(/^format-/, '') : undefined
+      await update($, focused, () => (isFormat(format) ? format : null))
+    }
+    return next(e)
+  })
+
+  // The band reports no loss of the keyboard, so a sent prompt is what takes the description away
+  on('prompt.submit', async ($, e, next) => {
+    await update($, focused, () => null)
+    return next(e)
+  })
+
   on('prompt.compose', async ($, e, next) => {
     const composed = await next(e)
     const { format, instructions } = await settingsFrom($)
@@ -85,6 +102,7 @@ export const register: Register = on => {
     const { format } = settings
     const own = settings.instructions[format] ?? ''
     const isEditingNow = await read($, isEditing)
+    const hint = await read($, focused)
     const elements = $.ui.resolve(e)
     const { Box, Button, Text } = elements
     const Input = 'Input' in elements ? elements.Input : undefined
@@ -103,6 +121,7 @@ export const register: Register = on => {
             )}
           </Button>
         ))}
+        {hint ? <Text dimColor>{DESCRIPTIONS[hint]}</Text> : null}
       </Box>
     )
 

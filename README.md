@@ -22,7 +22,7 @@ Proposals     ● visual  ○ artifact  ○ terminal  ○ default
 Instructions  Claude decides  e: edit
 ```
 
-- Click a format to pick it, or focus the row with `ctrl+x tab` and move with `tab`.
+- Click a format to pick it, or focus the row with `ctrl+x tab` and move with `tab`. While the focus is on a format, the end of the row says what it does.
 - `e` (or a click on `edit`) opens the instructions field; Enter saves, an empty field leaves the details to Claude.
 - `Esc` goes back to the prompt.
 

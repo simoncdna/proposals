@@ -36,6 +36,9 @@ const run = (args: string) => ({
   presentation: { isFullscreen: false, columns: 120 },
 }) as const
 
+const focusOn = (element: string) =>
+  ({ component: 'AbovePrompt', requestId: 'band', plugin: 'proposals', element, origin: { kind: 'person' } }) as const
+
 const ask = (preview: string) => ({
   tool: 'AskUserQuestion' as const,
   questions: [
@@ -146,4 +149,22 @@ test('hide takes the row away and show brings it back', async ($, on) => {
   const shown = await $.ui.mount({ ...BAND, surface: 'terminal' })
   expect(await shown.find({ type: 'Text', text: /Proposals/ })).toBeDefined()
   await shown.unmount()
+})
+
+test('the row describes the format under the focus ring, and only that one', async ($, on) => {
+  mock.store(on)
+  on('ui.focus', () => ({}))
+  on('ui.render', ($, e) => {
+    const { Box } = $.ui.resolve(e)
+    return <Box />
+  })
+  const ui = await $.ui.mount({ ...BAND, surface: 'terminal' })
+  expect(await ui.find({ type: 'Text', text: /every proposal/ })).toBeUndefined()
+
+  await $.ui.focus(focusOn('format-artifact'))
+  expect(await ui.find({ type: 'Text', text: /every proposal → artifact/ })).toBeDefined()
+
+  await $.ui.focus(focusOn('edit'))
+  expect(await ui.find({ type: 'Text', text: /every proposal/ })).toBeUndefined()
+  await ui.unmount()
 })
